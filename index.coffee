@@ -20,8 +20,8 @@ registration = (mimosaConfig, register) ->
 
     register ['buildDone'],             'afterServer', _writeClientLibrary
     register ['buildDone'],             'afterServer', _connect
-    register ['add','update','remove'], 'afterWrite',   _writeClientLibrary
-    register ['add','update','remove'], 'afterWrite',   _refreshPage
+    register ['add','update','remove'], 'afterWrite',  _writeClientLibrary
+    register ['add','update','remove'], 'afterWrite',  _refreshPage
 
     clientLibOutPath = path.join mimosaConfig.watch.compiledJavascriptDir, 'reload-client.js'
     clientLibText =  fs.readFileSync path.join(__dirname, 'assets', 'reload-client.js'), 'ascii'
