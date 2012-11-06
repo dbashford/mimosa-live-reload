@@ -13,7 +13,7 @@ clientLibText = null
 sockets = {}
 
 registration = (mimosaConfig, register) ->
-  if not mimosaConfig.isBuild and not mimosaConfig.isVirgin
+  if mimosaConfig.isServer
 
     unless mimosaConfig.liveReload.enabled
       return logger.debug "Live-Reload is turned off, not registering reload functionality."
