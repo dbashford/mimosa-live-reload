@@ -30,11 +30,17 @@ _connect = (mimosaConfig, options, next) ->
   unless options.userServer?
     return logger.warn "Live-Reload module is configured, but is unable to find your server.  Did you forget to return it from your startServer function? Disabling Live-Reload."
 
-  io = socketio.listen(options.userServer);
-  io.enable('browser client minification');
-  io.enable('browser client etag');
-  io.enable('browser client gzip');
-  io.set('log level', 1);
+  io = if options.socketio?
+    logger.debug "Using user's socketio"
+    options.socketio
+  else
+    logger.debug "Using module's socketio"
+    io = socketio.listen(options.userServer)
+    io.enable 'browser client minification'
+    io.enable 'browser client etag'
+    io.enable 'browser client gzip'
+    io.set 'log level', 1
+    io
 
   io.sockets.on 'connection', (socket) ->
     socket.on 'disconnect', ->
