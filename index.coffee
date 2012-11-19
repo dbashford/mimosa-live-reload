@@ -19,14 +19,14 @@ registration = (mimosaConfig, register) ->
       return logger.debug "Live-Reload is turned off, not registering reload functionality."
 
     register ['buildDone'],             'afterServer', _writeClientLibrary
-    register ['buildDone'],             'afterServer', _connect
+    register ['buildDone'],             'afterServer', connect
     register ['add','update','remove'], 'afterWrite',  _writeClientLibrary
     register ['add','update','remove'], 'afterWrite',  _refreshPage
 
     clientLibOutPath = path.join mimosaConfig.watch.compiledJavascriptDir, 'reload-client.js'
     clientLibText =  fs.readFileSync path.join(__dirname, 'assets', 'reload-client.js'), 'ascii'
 
-_connect = (mimosaConfig, options, next) ->
+connect = (mimosaConfig, options, next) ->
   unless options.userServer?
     return logger.warn "Live-Reload module is configured, but is unable to find your server.  Did you forget to return it from your startServer function? Disabling Live-Reload."
 
@@ -86,3 +86,4 @@ module.exports =
   defaults:     config.defaults
   placeholder:  config.placeholder
   validate:     config.validate
+  connect:      connect
