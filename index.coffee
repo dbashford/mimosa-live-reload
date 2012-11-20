@@ -8,9 +8,12 @@ watch =    require 'chokidar'
 socketio = require 'socket.io'
 
 config = require './config'
+
 clientLibOutPath = null
 clientLibText = null
 sockets = {}
+directoryWatchSetup  = false
+connections = []
 
 registration = (mimosaConfig, register) ->
   if mimosaConfig.isServer
@@ -25,6 +28,16 @@ registration = (mimosaConfig, register) ->
 
     clientLibOutPath = path.join mimosaConfig.watch.compiledJavascriptDir, 'reload-client.js'
     clientLibText =  fs.readFileSync path.join(__dirname, 'assets', 'reload-client.js'), 'ascii'
+
+disconnect = ->
+  for socketId, socket of sockets
+    socket.emit 'remove'
+    socket.disconnect()
+
+  for conn in connections
+    if conn.app?.removeAllListeners?
+      conn.app.removeAllListeners()
+    conn.connection.destroy()
 
 connect = (mimosaConfig, options, next) ->
   unless options.userServer?
@@ -42,20 +55,28 @@ connect = (mimosaConfig, options, next) ->
     io.set 'log level', 1
     io
 
+  options.userServer.on 'request', (request, response) ->
+    connections.push request
+
   io.sockets.on 'connection', (socket) ->
     socket.on 'disconnect', ->
       delete sockets[socket.id] if sockets[socket.id]
-    sockets[socket.id] = socket;
+    socket.on 'remove', ->
+      delete sockets[socket.id] if sockets[socket.id]
+    sockets[socket.id] = socket
 
-  dirsToWatch = mimosaConfig.liveReload.additionalDirs
+  _setupDirectoryWatch(mimosaConfig.liveReload.additionalDirs) unless directoryWatchSetup
+
+  next()
+
+_setupDirectoryWatch = (dirsToWatch) ->
   if dirsToWatch? and dirsToWatch.length? > 0
+    directoryWatchSetup = true
     watcher = watch.watch dirsToWatch, {persistent: true}
     watcher.on 'all', -> _emit 'page'
     watcher.on 'error', (error) ->
       # Doing nothing at the moment, just need to trap error event
       # console.log("ERROR: ", error)
-
-  next()
 
 _writeClientLibrary = (mimosaConfig, options, next) ->
   if options.userServer?
@@ -87,3 +108,4 @@ module.exports =
   placeholder:  config.placeholder
   validate:     config.validate
   connect:      connect
+  disconnect:   disconnect
