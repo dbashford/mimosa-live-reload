@@ -1,13 +1,8 @@
 (function() {
-  var socket;
-
-  function startSocket() {
-    socket = io.connect('http://localhost');
-    socket.on('page',       reloadPage)
-          .on('css',        reloadCss)
-          .on('reconnect',  reloadPage)
-          .on('remove', disconnect);
-  }
+  var socket = io.connect('http://localhost');
+  socket.on('page',       reloadPage)
+        .on('css',        reloadCss)
+        .on('reconnect',  reloadPage);
 
   function reloadPage() {
     location.reload();
@@ -24,12 +19,5 @@
     }
     console.log('CSS updated');
   }
-
-  function disconnect() {
-    socket.socket.transport.websocket.close();
-    setTimeout(reloadPage, 4000)
-  }
-
-  startSocket();
 
 })();

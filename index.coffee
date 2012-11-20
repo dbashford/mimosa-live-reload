@@ -30,14 +30,8 @@ registration = (mimosaConfig, register) ->
     clientLibText =  fs.readFileSync path.join(__dirname, 'assets', 'reload-client.js'), 'ascii'
 
 disconnect = ->
-  for socketId, socket of sockets
-    socket.emit 'remove'
-    socket.disconnect()
-
-  for conn in connections
-    if conn.app?.removeAllListeners?
-      conn.app.removeAllListeners()
-    conn.connection.destroy()
+  socket.disconnect() for socketId, socket of sockets
+  conn.connection.destroy() for conn in connections
 
 connect = (mimosaConfig, options, next) ->
   unless options.userServer?
@@ -60,8 +54,6 @@ connect = (mimosaConfig, options, next) ->
 
   io.sockets.on 'connection', (socket) ->
     socket.on 'disconnect', ->
-      delete sockets[socket.id] if sockets[socket.id]
-    socket.on 'remove', ->
       delete sockets[socket.id] if sockets[socket.id]
     sockets[socket.id] = socket
 
