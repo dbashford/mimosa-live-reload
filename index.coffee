@@ -13,7 +13,6 @@ clientLibOutPath = null
 clientLibText = null
 sockets = {}
 directoryWatchSetup  = false
-connections = []
 
 registration = (mimosaConfig, register) ->
   if mimosaConfig.isServer
@@ -31,7 +30,6 @@ registration = (mimosaConfig, register) ->
 
 disconnect = ->
   socket.disconnect() for socketId, socket of sockets
-  conn.connection.destroy() for conn in connections
 
 connect = (mimosaConfig, options, next) ->
   unless options.userServer?
@@ -48,9 +46,6 @@ connect = (mimosaConfig, options, next) ->
     io.enable 'browser client gzip'
     io.set 'log level', 1
     io
-
-  options.userServer.on 'request', (request, response) ->
-    connections.push request
 
   io.sockets.on 'connection', (socket) ->
     socket.on 'disconnect', ->
