@@ -2,6 +2,8 @@ path = require "path"
 
 "use strict"
 
+windowsDrive = /^[A-Za-z]:\\/
+
 exports.defaults = ->
   liveReload:
     enabled:true
@@ -15,7 +17,8 @@ exports.placeholder = ->
       # enabled:true                # Whether or not live-reload is enabled
       # additionalDirs:["views"]    # Additional directories outside the watch.compiledDir
                                     # that you would like to have trigger a page refresh,
-                                    # like, by default, static views
+                                    # like, by default, static views. Is string path,
+                                    # can be relative to project root, or absolute
   """
 
 exports.validate = (config) ->
@@ -28,10 +31,14 @@ exports.validate = (config) ->
 
       if config.liveReload.additionalDirs?
         if Array.isArray(config.liveReload.additionalDirs)
+          newAddDirs = []
           for dir in config.liveReload.additionalDirs
-            unless typeof dir is "string"
+            if typeof dir is "string"
+              newAddDirs.push __determinePath dir, config.root
+            else
               errors.push "liveReload.additionalDirs must be an array of strings"
               break
+          config.liveReload.additionalDirs = newAddDirs
         else
           errors.push "liveReload.additionalDirs must be an array"
 
@@ -41,8 +48,9 @@ exports.validate = (config) ->
   if config.isBuild
     config.liveReload.enabled = false
 
-  if errors.length is 0
-    config.liveReload.additionalDirs = config.liveReload.additionalDirs.map (dir) ->
-      path.join config.root, dir
-
   errors
+
+__determinePath = (thePath, relativeTo) ->
+  return thePath if windowsDrive.test thePath
+  return thePath if thePath.indexOf("/") is 0
+  path.join relativeTo, thePath
