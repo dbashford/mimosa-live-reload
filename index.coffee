@@ -20,8 +20,8 @@ registration = (mimosaConfig, register) ->
     unless mimosaConfig.liveReload.enabled
       return logger.debug "Live-Reload is turned off, not registering reload functionality."
 
-    register ['buildDone'],             'afterServer', _writeClientLibrary
-    register ['buildDone'],             'afterServer', connect
+    register ['postBuild'],             'afterServer', _writeClientLibrary
+    register ['postBuild'],             'afterServer', connect
     register ['add','update','remove'], 'afterWrite',  _writeClientLibrary
     register ['add','update','remove'], 'afterWrite',  _refreshPage
 
