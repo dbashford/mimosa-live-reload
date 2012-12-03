@@ -15,6 +15,11 @@ sockets = {}
 directoryWatchSetup  = false
 
 registration = (mimosaConfig, register) ->
+  register ['preClean'], 'init',  _removeClientLibrary
+
+  clientLibOutPath = path.join mimosaConfig.watch.compiledJavascriptDir, 'reload-client.js'
+  clientLibText =  fs.readFileSync path.join(__dirname, 'assets', 'reload-client.js'), 'ascii'
+
   if mimosaConfig.isServer
 
     unless mimosaConfig.liveReload.enabled
@@ -25,8 +30,6 @@ registration = (mimosaConfig, register) ->
     register ['add','update','remove'], 'afterWrite',  _writeClientLibrary
     register ['add','update','remove'], 'afterWrite',  _refreshPage
 
-    clientLibOutPath = path.join mimosaConfig.watch.compiledJavascriptDir, 'reload-client.js'
-    clientLibText =  fs.readFileSync path.join(__dirname, 'assets', 'reload-client.js'), 'ascii'
 
 disconnect = ->
   socket.disconnect() for socketId, socket of sockets
@@ -78,6 +81,18 @@ _writeClientLibrary = (mimosaConfig, options, next) ->
           next()
   else
     next()
+
+_removeClientLibrary = (mimosaConfig, options, next) ->
+  fs.exists clientLibOutPath, (exists) ->
+    if exists
+      fs.unlink clientLibOutPath, (err) ->
+        if err
+          logger.error "Error occured removing client library: #{err}"
+        else
+          logger.info "mimosa-live-reload: removed live reload client."
+        next()
+    else
+      next()
 
 _refreshPage = (mimosaConfig, options, next) ->
   type = if options.isCSS then "css" else "page"
