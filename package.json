@@ -1,7 +1,7 @@
 {
   "name": "mimosa-live-reload",
   "preferGlobal": "false",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "homepage": "http://www.mimosajs.com",
   "author": "David Bashford",
   "description": "Mimosa module providing live reload functionality",
