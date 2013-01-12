@@ -1,7 +1,6 @@
 {
   "name": "mimosa-live-reload",
-  "preferGlobal": "false",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "homepage": "http://www.mimosajs.com",
   "author": "David Bashford",
   "description": "Mimosa module providing live reload functionality",
@@ -26,9 +25,9 @@
     "sockets"
   ],
   "dependencies": {
-    "logmimosa": "0.3.0",
+    "logmimosa": "0.3.1",
     "socket.io": "0.9.13",
-    "chokidar": "0.5.0"
+    "chokidar": "0.5.1"
   },
   "license": "MIT",
   "engines": {
