@@ -46,7 +46,6 @@ connect = (mimosaConfig, options, next) ->
     io = socketio.listen(options.userServer)
     io.enable 'browser client minification'
     io.enable 'browser client etag'
-    io.enable 'browser client gzip'
     io.set 'log level', 1
     io
 
