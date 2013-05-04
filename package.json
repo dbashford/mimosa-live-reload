@@ -1,6 +1,6 @@
 {
   "name": "mimosa-live-reload",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "homepage": "http://www.mimosajs.com",
   "author": "David Bashford",
   "description": "Mimosa module providing live reload functionality",
@@ -32,5 +32,9 @@
   "license": "MIT",
   "engines": {
     "node": ">=0.8"
+  },
+  "main": "./lib/index",
+  "scripts": {
+    "prepublish": "mimosa build"
   }
 }
