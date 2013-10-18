@@ -6,6 +6,7 @@ fs   = require 'fs'
 logger =   require 'logmimosa'
 watch =    require 'chokidar'
 socketio = require 'socket.io'
+wrench = require 'wrench'
 
 config = require './config'
 
@@ -73,6 +74,7 @@ _writeClientLibrary = (mimosaConfig, options, next) ->
       if exists
         next()
       else
+        _makeDirectory path.dirname(clientLibOutPath)
         logger.debug "Writing live reload client library to [[ #{clientLibOutPath} ]]"
         fs.writeFile clientLibOutPath, clientLibText, 'ascii', (err) ->
           if err
@@ -92,6 +94,11 @@ _removeClientLibrary = (mimosaConfig, options, next) ->
         next()
     else
       next()
+
+_makeDirectory = (dir) ->
+  unless fs.existsSync(dir)
+    logger.debug("Making folder [[ " + dir + " ]]");
+    wrench.mkdirSyncRecursive(dir, 0o0777);
 
 _refreshPage = (mimosaConfig, options, next) ->
   type = if options.isCSS then "css" else "page"
