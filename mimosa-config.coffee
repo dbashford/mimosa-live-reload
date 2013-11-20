@@ -4,6 +4,6 @@ exports.config =
     sourceDir: "src"
     compiledDir: "lib"
     javascriptDir: null
-  lint:
+  jshint:
     rules:
       node: true
