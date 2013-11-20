@@ -1,10 +1,9 @@
 exports.config =
-  modules: ["lint"]
+  modules: ["jshint"]
   watch:
     sourceDir: "src"
     compiledDir: "lib"
     javascriptDir: null
   lint:
     rules:
-      javascript:
-        node: true
+      node: true
