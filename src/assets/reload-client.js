@@ -1,5 +1,10 @@
 (function() {
-  var socket = io.connect();
+  var scripts = document.getElementsByTagName("scripts");
+  var socket = io.connect(
+    (function() { for(var i=0;i<scripts.length;i++) { if(scripts[i].src && scripts[i].src.indexOf("/socket.io.js"))
+      return (/^([^#]*?:\/\/.*?)(\/.*)$/.exec(scripts[i].src) || [])[1]
+    } })()
+  );
   socket.on('page',       reloadPage)
         .on('css',        reloadCss)
         .on('reconnect',  reloadPage);
