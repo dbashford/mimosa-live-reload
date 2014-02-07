@@ -3,7 +3,6 @@
 path = require 'path'
 fs   = require 'fs'
 
-logger =   require 'logmimosa'
 watch =    require 'chokidar'
 socketio = require 'socket.io'
 wrench = require 'wrench'
@@ -14,8 +13,11 @@ clientLibOutPath = null
 clientLibText = null
 sockets = {}
 directoryWatchSetup  = false
+logger = null
 
 registration = (mimosaConfig, register) ->
+  logger = mimosaConfig.log
+
   register ['preClean'], 'init',  _removeClientLibrary
 
   clientLibOutPath = path.join mimosaConfig.watch.compiledJavascriptDir, 'reload-client.js'
@@ -75,7 +77,10 @@ _writeClientLibrary = (mimosaConfig, options, next) ->
         next()
       else
         _makeDirectory path.dirname(clientLibOutPath)
-        logger.debug "Writing live reload client library to [[ #{clientLibOutPath} ]]"
+
+        if logger.isDebug()
+          logger.debug "Writing live reload client library to [[ #{clientLibOutPath} ]]"
+
         fs.writeFile clientLibOutPath, clientLibText, 'ascii', (err) ->
           if err
             logger.error err
@@ -97,8 +102,10 @@ _removeClientLibrary = (mimosaConfig, options, next) ->
 
 _makeDirectory = (dir) ->
   unless fs.existsSync(dir)
-    logger.debug("Making folder [[ " + dir + " ]]");
-    wrench.mkdirSyncRecursive(dir, 0o0777);
+    if logger.isDebug()
+      logger.debug("Making folder [[ " + dir + " ]]")
+
+    wrench.mkdirSyncRecursive(dir, 0o0777)
 
 _refreshPage = (mimosaConfig, options, next) ->
   type = if options.isCSS then "css" else "page"
@@ -106,7 +113,9 @@ _refreshPage = (mimosaConfig, options, next) ->
   next()
 
 _emit = (type) ->
-  logger.debug "Sending message to client to refresh page for type [[ #{type} ]]"
+  if logger.isDebug()
+    logger.debug "Sending message to client to refresh page for type [[ #{type} ]]"
+
   Object.keys(sockets).forEach (s) ->
     sockets[s].emit type
 

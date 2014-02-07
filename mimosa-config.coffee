@@ -1,5 +1,8 @@
 exports.config =
-  modules: ["jshint"]
+  modules: ["jshint", "coffeescript", "copy"]
+  coffeescript:
+    options:
+      sourceMap: false
   watch:
     sourceDir: "src"
     compiledDir: "lib"
