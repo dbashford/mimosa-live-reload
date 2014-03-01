@@ -9,12 +9,12 @@ exports.placeholder = ->
   """
   \t
 
-    # liveReload:                   # Configuration for live-reload
-      # enabled:true                # Whether or not live-reload is enabled
-      # additionalDirs:["views"]    # Additional directories outside the watch.compiledDir
-                                    # that you would like to have trigger a page refresh,
-                                    # like, by default, static views. Is string path,
-                                    # can be relative to project root, or absolute
+    liveReload:                   # Configuration for live-reload
+      enabled:true                # Whether or not live-reload is enabled
+      additionalDirs:["views"]    # Additional directories outside the watch.compiledDir
+                                  # that you would like to have trigger a page refresh,
+                                  # like, by default, static views. Is string path,
+                                  # can be relative to project root, or absolute
   """
 
 exports.validate = (config, validators) ->
