@@ -3,10 +3,6 @@
 path = require 'path'
 fs   = require 'fs'
 
-watch =    require 'chokidar'
-socketio = require 'socket.io'
-wrench = require 'wrench'
-
 config = require './config'
 
 clientLibOutPath = null
@@ -46,6 +42,7 @@ connect = (mimosaConfig, options, next) ->
     options.socketio
   else
     logger.debug "Using module's socketio"
+    socketio = require 'socket.io'
     io = socketio.listen(options.userServer)
     io.enable 'browser client minification'
     io.enable 'browser client etag'
@@ -63,6 +60,8 @@ connect = (mimosaConfig, options, next) ->
 
 _setupDirectoryWatch = (dirsToWatch) ->
   if dirsToWatch? and dirsToWatch.length? > 0
+    watch = require 'chokidar'
+
     directoryWatchSetup = true
     watcher = watch.watch dirsToWatch, {persistent: true}
     watcher.on 'all', -> _emit 'page'
@@ -105,6 +104,7 @@ _makeDirectory = (dir) ->
     if logger.isDebug()
       logger.debug("Making folder [[ " + dir + " ]]")
 
+    wrench = require 'wrench'
     wrench.mkdirSyncRecursive(dir, 0o0777)
 
 _refreshPage = (mimosaConfig, options, next) ->
