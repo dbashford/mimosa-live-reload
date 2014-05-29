@@ -64,7 +64,12 @@ _setupDirectoryWatch = (dirsToWatch) ->
 
     directoryWatchSetup = true
     watcher = watch.watch dirsToWatch, {persistent: true}
-    watcher.on 'all', -> _emit 'page'
+    watcher.on 'all', (event, filePath) ->
+      ext = path.extname(filepath)
+      if(ext == '.css')
+        _emit 'css'
+      else
+        _emit 'page'
     watcher.on 'error', (error) ->
       # Doing nothing at the moment, just need to trap error event
       # console.log("ERROR: ", error)
