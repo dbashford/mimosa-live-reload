@@ -65,8 +65,8 @@ _setupDirectoryWatch = (dirsToWatch) ->
     directoryWatchSetup = true
     watcher = watch.watch dirsToWatch, {persistent: true}
     watcher.on 'all', (event, filePath) ->
-      ext = path.extname(filepath)
-      if(ext == '.css')
+      ext = path.extname(filePath)
+      if(ext is '.css')
         _emit 'css'
       else
         _emit 'page'
