@@ -44,9 +44,10 @@ connect = (mimosaConfig, options, next) ->
     logger.debug "Using module's socketio"
     socketio = require 'socket.io'
     io = socketio.listen(options.userServer)
-    io.enable 'browser client minification'
-    io.enable 'browser client etag'
-    io.set 'log level', 1
+    # Not available with 1.0 socket.io
+    # io.enable 'browser client minification'
+    # io.enable 'browser client etag'
+    # io.set 'log level', 1
     io
 
   io.sockets.on 'connection', (socket) ->
