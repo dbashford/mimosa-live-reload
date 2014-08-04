@@ -18,7 +18,12 @@
     for (var i = 0; i < links.length; i++) {
       var tag = links[i];
       if (tag.rel.toLowerCase().indexOf("stylesheet") >= 0 && tag.href) {
-        var newHref = tag.href.replace(/(&|%5C?)\d+/, "");
+        var newHref = tag.href.replace(/(&|%5C?)\d+/, ""),
+            isChromium = window.chrome,
+            vendorName = window.navigator.vendor;
+        if(isChromium !== null && vendorName === "Google Inc.") {
+          tag.href = "#breakingTheUrl";
+        }
         tag.href = newHref + (newHref.indexOf("?") >= 0 ? "&" : "?") + (new Date().valueOf());
       }
     }
