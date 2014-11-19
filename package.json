@@ -1,6 +1,6 @@
 {
   "name": "mimosa-live-reload",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "homepage": "http://www.mimosa.io",
   "author": "David Bashford",
   "description": "Mimosa module providing live reload functionality",
@@ -25,7 +25,7 @@
     "sockets"
   ],
   "dependencies": {
-    "socket.io": "1.0.6",
+    "socket.io": "1.2.0",
     "chokidar": "0.6.3",
     "wrench": "1.5.8"
   },
