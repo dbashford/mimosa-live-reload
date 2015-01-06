@@ -9,6 +9,8 @@ For more information regarding Mimosa, see http://mimosa.io.
 
 Add `'live-reload'` to your list of modules.  That's all!  Mimosa will install the module for you when you start `mimosa watch` or `mimosa build`.
 
+This module depends on mimosa-server. Currently no other Mimosa module accomplishes what mimosa-live-reload needs in order to have proper access to the dev server.
+
 # Functionality
 
 This module is responsible for refreshing your browser assets when they are updated in your codebase.
@@ -27,7 +29,7 @@ If `mimosa new` was used to create the project, then live reload will already be
 
 ### Adding mimosa-live-reload to existing project?
 
-If enabling it on an existing project, some minor things need to change on both the client and server to use it.
+If enabling it on an existing project, some minor things need to change on both the client and server for mimosa-live-reload to function.
 
 One great way to figure out how to add live-reload to your application is to create a `mimosa new` app and see the very simple ways in which it is wired up.  Below the wiring points are described.
 
