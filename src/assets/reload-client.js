@@ -18,13 +18,14 @@
     for (var i = 0; i < links.length; i++) {
       var tag = links[i];
       if (tag.rel.toLowerCase().indexOf("stylesheet") >= 0 && tag.href) {
-        var newHref = tag.href.replace(/(&|%5C?)\d+/, ""),
-            isChromium = window.chrome,
-            vendorName = window.navigator.vendor;
-        if(isChromium !== null && vendorName === "Google Inc.") {
-          tag.href = "#breakingTheUrl";
-        }
+        var newHref = tag.href.replace(/(&|%5C?)\d+/, "");
         tag.href = newHref + (newHref.indexOf("?") >= 0 ? "&" : "?") + (new Date().valueOf());
+
+        var el = document.body;
+        var bodyDisplay = el.style.display || 'block';
+        el.style.display = 'none';
+        el.offsetHeight;
+        el.style.display = bodyDisplay;
       }
     }
     console.log('CSS updated');
