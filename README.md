@@ -1,8 +1,6 @@
 mimosa-live-reload
 ===========
 
-# Overview
-
 This is a live reload module for the Mimosa build tool. This module does not require browser plugins or modules to function.
 
 For more information regarding Mimosa, see http://mimosa.io.
