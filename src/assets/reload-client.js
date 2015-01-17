@@ -16,16 +16,17 @@
   function reloadCss() {
     var links = document.getElementsByTagName("link");
     for (var i = 0; i < links.length; i++) {
-      var tag = links[i];
-      if (tag.rel.toLowerCase().indexOf("stylesheet") >= 0 && tag.href) {
-        var newHref = tag.href.replace(/(&|%5C?)\d+/, "");
-        tag.href = newHref + (newHref.indexOf("?") >= 0 ? "&" : "?") + (new Date().valueOf());
+      var original = links[i];
+      if (original.rel.toLowerCase().indexOf("stylesheet") >= 0 && original.href) {
+        var newHref = original.href.replace(/(&|%5C?)\d+/, "");
+        original.href = newHref + (newHref.indexOf("?") >= 0 ? "&" : "?") + (new Date().valueOf());
 
-        var el = document.body;
-        var bodyDisplay = el.style.display || 'block';
-        el.style.display = 'none';
-        el.offsetHeight;
-        el.style.display = bodyDisplay;
+        // Clone the link node and swap it out for the original
+        var clone = original.cloneNode();
+        var parent = original.parentNode;
+        var neighbor = original.nextSibling;
+        parent.insertBefore(clone, neighbor);
+        parent.removeChild(original);
       }
     }
     console.log('CSS updated');
